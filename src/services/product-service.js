@@ -1,4 +1,5 @@
 const { ProductRepository } = require("../repository/index.js");
+const { AppError } = require("../utils/errors/index.js");
 
 class ProductService {
   constructor() {
@@ -11,7 +12,12 @@ class ProductService {
       return product;
     } catch (error) {
       console.log("Somthing went wrong in service layer");
-      throw error;
+      throw new AppError(
+        error.name || "ProductServiceError",
+        "Failed to create product",
+        error.explanation || error.message,
+        error.statusCode
+      );
     }
   }
 
@@ -20,8 +26,13 @@ class ProductService {
       const product = await this.productRepository.get(id);
       return product;
     } catch (error) {
-      console.log("Somthing went wrong in service layer");
-      throw error;
+      console.log("Somthing went wrong in service layer", error);
+      throw new AppError(
+        error.name || "ProductServiceError",
+        "Failed to fetch product",
+        error.explanation || error.message,
+        error.statusCode
+      );
     }
   }
 
@@ -30,8 +41,13 @@ class ProductService {
       const product = await this.productRepository.update(data, id);
       return product;
     } catch (error) {
-      console.log("Somthing went wrong in service layer");
-      throw error;
+      console.log("Somthing went wrong in service layer", error);
+      throw new AppError(
+        error.name || "ProductServiceError",
+        "Failed to update product",
+        error.explanation || error.message,
+        error.statusCode
+      );
     }
   }
 
@@ -41,7 +57,12 @@ class ProductService {
       return response;
     } catch (error) {
       console.log("Somthing went wrong in service layer");
-      throw error;
+      throw new AppError(
+        error.name || "ProductServiceError",
+        "Failed to delete product",
+        error.explanation || error.message,
+        error.statusCode
+      );
     }
   }
 }

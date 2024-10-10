@@ -5,13 +5,22 @@ const validateProduct = (req, res, next) => {
     return res.status(StatusCodes.BAD_REQUEST).json({
       data: {},
       succes: false,
-      message: "Invalid request for create a product",
+      message: "Name, price, and category are required",
       err: "Missing Mandatory field to create a product",
+    });
+  }
+
+  if (isNaN(req.body.price)) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      data: {},
+      succes: false,
+      message: "Invalid Price value",
+      error: "Price must be a valid number",
     });
   }
   next();
 };
 
 module.exports = {
-    validateProduct,
+  validateProduct,
 };

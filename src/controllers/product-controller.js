@@ -21,18 +21,21 @@ const create = async (req, res) => {
       err: {},
     });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      data: {},
-      success: false,
-      message: "Failed to create product.",
-      err: error,
-    });
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({
+        success: false,
+        data: {},
+        message: error.message || "Failed to create product.",
+        err: error.explanation || error,
+      });
   }
 };
 
 const get = async (req, res) => {
   try {
-    const product = await productService.get(req.params.id);
+    const { id } = req.params;
+    const product = await productService.get(id);
     return res.status(StatusCodes.OK).json({
       data: product,
       success: true,
@@ -40,22 +43,25 @@ const get = async (req, res) => {
       err: {},
     });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      data: {},
-      success: false,
-      message: "Failed to fetch product.",
-      err: error,
-    });
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({
+        success: false,
+        data: {},
+        message: error.message || "Failed to fetch product.",
+        err: error.explanation || error,
+      });
   }
 };
 
 const update = async (req, res) => {
   try {
     const { name, price, description, category } = req.body;
+    const { id } = req.params;
 
     const product = await productService.update(
       { name, price, description, category },
-      req.params.id
+      id
     );
     return res.status(StatusCodes.OK).json({
       data: product,
@@ -64,18 +70,21 @@ const update = async (req, res) => {
       err: {},
     });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      data: {},
-      success: false,
-      message: "Failed to update product.",
-      err: error,
-    });
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({
+        success: false,
+        data: {},
+        message: error.message || "Failed to update product.",
+        err: error.explanation || error,
+      });
   }
 };
 
 const destroy = async (req, res) => {
   try {
-    const response = await productService.destroy(req.params.id);
+    const { id } = req.params;
+    const response = await productService.destroy(id);
     return res.status(StatusCodes.OK).json({
       data: response,
       success: true,
@@ -83,12 +92,14 @@ const destroy = async (req, res) => {
       err: {},
     });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      data: {},
-      success: false,
-      message: "Failed to delete product.",
-      err: error,
-    });
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({
+        success: false,
+        data: {},
+        message: error.message || "Failed to delete product.",
+        err: error.explanation || error,
+      });
   }
 };
 
