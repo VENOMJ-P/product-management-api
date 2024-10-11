@@ -1,9 +1,13 @@
 const express = require("express");
 
-const v1ApiRoutes = require("./v1/index.js");
+const productController = require("../controllers/product-controller.js");
+const { validateProduct } = require("../middlewares/validate-product.js");
 
 const router = express.Router();
 
-router.use("/v1/products", v1ApiRoutes);
+router.post("/", validateProduct, productController.create);
+router.get("/:id", productController.get);
+router.put("/:id", validateProduct, productController.update);
+router.delete("/:id", productController.destroy);
 
 module.exports = router;
