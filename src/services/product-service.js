@@ -65,6 +65,26 @@ class ProductService {
       );
     }
   }
+
+  async getAllProducts({ page, limit, name, category }) {
+    try {
+      const products = await this.productRepository.getAll({
+        page,
+        limit,
+        name,
+        category,
+      });
+      return products;
+    } catch (error) {
+      console.log("Something went wrong in service layer");
+      throw new AppError(
+        error.name || "ProductServiceError",
+        "Failed to fetch products",
+        error.explanation || error.message,
+        error.statusCode
+      );
+    }
+  }
 }
 
 module.exports = ProductService;

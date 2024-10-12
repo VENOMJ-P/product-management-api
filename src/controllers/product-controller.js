@@ -103,9 +103,39 @@ const destroy = async (req, res) => {
   }
 };
 
+const getAllProducts = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, name, category } = req.query;
+
+    const products = await productService.getAllProducts({
+      page: parseInt(page, 10),
+      limit: parseInt(limit, 10),
+      name,
+      category,
+    });
+
+    return res.status(StatusCodes.OK).json({
+      data: products,
+      success: true,
+      message: "Successfully fetched products.",
+      err: {},
+    });
+  } catch (error) {
+    return res
+      .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({
+        success: false,
+        data: {},
+        message: error.message || "Failed to fetch products.",
+        err: error.explanation || error,
+      });
+  }
+};
+
 module.exports = {
   create,
   get,
   update,
   destroy,
+  getAllProducts,
 };
